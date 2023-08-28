@@ -57,7 +57,11 @@ class HttpExtension {
     async httpRequest({ method, url, options }) {
         try {
             const requestOptions = JSON.parse(options);
-            const response = await fetch(url, { method, ...requestOptions });
+            const response = await fetch(url, { 
+                method, 
+                mode: 'no-cors',
+                ...requestOptions 
+            });
             if (response.ok) {
                 const data = await response.json();
                 return JSON.stringify(data);
