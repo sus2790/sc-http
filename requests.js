@@ -4,28 +4,40 @@ class HttpExtension {
     }
 
     getInfo() {
+        const httpMethods = [
+            "GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH", "CONNECT", "TRACE"
+        ];
+
         return {
             "id": "httpextension",
             "name": "HTTP Extension",
             "blocks": [
                 {
-                    "opcode": "httpGet",
+                    "opcode": "httpRequest",
                     "blockType": "reporter",
-                    "text": "HTTP GET request to [url]",
+                    "text": "HTTP [method] request to [url]",
                     "arguments": {
+                        "method": {
+                            "type": "string",
+                            "menu": "httpMethods",
+                            "defaultValue": "GET"
+                        },
                         "url": {
                             "type": "string",
                             "defaultValue": "https://jsonplaceholder.typicode.com/posts/1"
                         }
                     }
                 }
-            ]
+            ],
+            "menus": {
+                "httpMethods": httpMethods
+            }
         };
     }
 
-    async httpGet({ url }) {
+    async httpRequest({ method, url }) {
         try {
-            const response = await fetch(url);
+            const response = await fetch(url, { method });
             if (response.ok) {
                 const data = await response.json();
                 return JSON.stringify(data);
