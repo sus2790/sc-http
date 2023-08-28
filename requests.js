@@ -30,9 +30,24 @@ class HttpExtension {
                     }
                 },
                 {
-                    "opcode": "getProperty",
+                    "opcode": "getJSONProperty",
                     "blockType": "reporter",
                     "text": "get property [property] from JSON [text]",
+                    "arguments": {
+                        "property": {
+                            "type": "string",
+                            "defaultValue": "propertyName"
+                        },
+                        "text": {
+                            "type": "string",
+                            "defaultValue": "{}"
+                        }
+                    }
+                },
+                {
+                    "opcode": "getProperty",
+                    "blockType": "reporter",
+                    "text": "get property [property] from [text]",
                     "arguments": {
                         "property": {
                             "type": "string",
@@ -113,11 +128,25 @@ class HttpExtension {
         }
     }
 
-    getJSONProperty({ property, text }) {
+    getProperty({ property, text }) {
         try {
             const jsonData = JSON.parse(text);
             if (jsonData.hasOwnProperty(property)) {
                 return this.data[property];
+            } else {
+                return "Property not found";
+            }
+        } catch (error) {
+            console.error(error);
+            return "Error: " + error.message;
+        }
+    }
+
+    getJSONProperty({ property, text }) {
+        try {
+            const jsonData = JSON.parse(text);
+            if (jsonData.hasOwnProperty(property)) {
+                return jsonData[property];
             } else {
                 return "Property not found";
             }
