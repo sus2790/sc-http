@@ -38,6 +38,40 @@ class HttpExtension {
                             "defaultValue": "{}"
                         }
                     }
+                },
+                {
+                    "opcode": "getJSONProperty",
+                    "blockType": "reporter",
+                    "text": "get property [property] from JSON [text]",
+                    "arguments": {
+                        "property": {
+                            "type": "string",
+                            "defaultValue": "propertyName"
+                        },
+                        "text": {
+                            "type": "string",
+                            "defaultValue": "{}"
+                        }
+                    }
+                },
+                {
+                    "opcode": "modifyJSONProperty",
+                    "blockType": "reporter",
+                    "text": "set property [property] of JSON [text] to [value]",
+                    "arguments": {
+                        "property": {
+                            "type": "string",
+                            "defaultValue": "propertyName"
+                        },
+                        "text": {
+                            "type": "string",
+                            "defaultValue": "{}"
+                        },
+                        "value": {
+                            "type": "string",
+                            "defaultValue": "newValue"
+                        }
+                    }
                 }
             ],
             "menus": {
@@ -65,6 +99,31 @@ class HttpExtension {
         try {
             const parsedData = JSON.parse(text);
             return parsedData;
+        } catch (error) {
+            console.error(error);
+            return "Error: " + error.message;
+        }
+    }
+
+    getJSONProperty({ property, text }) {
+        try {
+            const jsonData = JSON.parse(text);
+            if (jsonData.hasOwnProperty(property)) {
+                return jsonData[property];
+            } else {
+                return "Property not found";
+            }
+        } catch (error) {
+            console.error(error);
+            return "Error: " + error.message;
+        }
+    }
+
+    modifyJSONProperty({ property, text, value }) {
+        try {
+            const jsonData = JSON.parse(text);
+            jsonData[property] = value;
+            return JSON.stringify(jsonData);
         } catch (error) {
             console.error(error);
             return "Error: " + error.message;
