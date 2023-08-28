@@ -66,24 +66,17 @@ class HttpExtension {
                 const data = await response.json();
                 return JSON.stringify(data);
             } else {
-                return "Error: " + response.status + " " + response.statusText;
+                return "Error: " + response.status + response.message;
             }
         } catch (error) {
             console.error(error);
-            return "Error: " + error.message;
+            return "Error: " + response.status + error.message;
         }
     }
 
-
     getJSONProperty({ property, text }) {
         try {
-            let jsonData;
-            try {
-                jsonData = JSON.parse(text);
-            } catch (error) {
-                console.error(error);
-                return "Error: Invalid JSON";
-            }
+            const jsonData = JSON.parse(text);
             if (jsonData.hasOwnProperty(property)) {
                 return jsonData[property];
             } else {
