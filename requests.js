@@ -15,7 +15,7 @@ class HttpExtension {
                 {
                     "opcode": "httpRequest",
                     "blockType": "reporter",
-                    "text": "HTTP [method] request to [url]",
+                    "text": "HTTP [method] request to [url] with options [options]",
                     "arguments": {
                         "method": {
                             "type": "string",
@@ -25,6 +25,10 @@ class HttpExtension {
                         "url": {
                             "type": "string",
                             "defaultValue": "https://jsonplaceholder.typicode.com/posts/1"
+                        },
+                        "options": {
+                            "type": "string",
+                            "defaultValue": "{}"
                         }
                     }
                 },
@@ -50,9 +54,10 @@ class HttpExtension {
         };
     }
 
-    async httpRequest({ method, url }) {
+    async httpRequest({ method, url, options }) {
         try {
-            const response = await fetch(url, { method });
+            const requestOptions = JSON.parse(options);
+            const response = await fetch(url, { method, ...requestOptions });
             if (response.ok) {
                 const data = await response.json();
                 return JSON.stringify(data);
