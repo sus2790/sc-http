@@ -15,7 +15,7 @@ class HttpExtension {
                 {
                     "opcode": "httpRequest",
                     "blockType": "reporter",
-                    "text": "HTTP [method] request to [url]",
+                    "text": "Requests [url] - [method]",
                     "arguments": {
                         "method": {
                             "type": "string",
