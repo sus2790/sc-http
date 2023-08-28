@@ -24,7 +24,7 @@ class HttpExtension {
                         },
                         "url": {
                             "type": "string",
-                            "defaultValue": "https://jsonplaceholder.typicode.com/posts/1"
+                            "defaultValue": "https://example.com/"
                         },
                         "options": {
                             "type": "string",
