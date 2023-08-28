@@ -1,37 +1,35 @@
-class MyExtension {
-    constructor(runtime) {
-        this.runtime = runtime;
-    }
+const ky = require("ky");
 
+class ScratchHTTP {
     getInfo() {
         return {
-            "id": "myextension",
-            "name": "My Extension",
-            "blocks": [
-                {
-                    "opcode": "addNumbers",
-                    "blockType": "reporter",
-                    "text": "add [num1] and [num2]",
-                    "arguments": {
-                        "num1": {
-                            "type": "number",
-                            "defaultValue": 0
-                        },
-                        "num2": {
-                            "type": "number",
-                            "defaultValue": 0
-                        }
+            id: "ScratchHTTP",
+            name: "HTTP Requests",
+            blocks: [{
+                opcode: "httpRequest",
+                blockType: Scratch.BlockType.REPORTER,
+                text: "HTTP [method] [url]",
+                arguments: {
+                    method: {
+                        type: Scratch.ArgumentType.STRING,
+                        menu: "method",
+                        defaultValue: "GET"
+                    },
+                    url: {
+                        type: Scratch.ArgumentType.STRING,
+                        defaultValue: "https://www.random.org/strings/?num=1&len=10&digits=on&upperalpha=on&loweralpha=on&format=plain"
                     }
                 }
-            ]
+            }],
+            menus: {
+                method: ["GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH"]
+            }
         };
     }
 
-    addNumbers({ num1, num2 }) {
-        // 在這裡實現方塊的功能
-        const result = num1 + num2;
-        return result;
+    async httpRequest({method, url}) {
+        return await ky(url, {method}).text();
     }
 }
 
-Scratch.extensions.register(new MyExtension());
+Scratch.extensions.register(new ScratchHTTP());
