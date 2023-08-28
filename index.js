@@ -1,28 +1,37 @@
-class NitroBlock {
+class MyExtension {
+    constructor(runtime) {
+        this.runtime = runtime;
+    }
+
     getInfo() {
         return {
-            "id": "NitroBlock",
-            "name": "NitroBlock",
-            "blocks": [{
-                "opcode": "substringy",
-                "blockType": "reporter",
-                "text": "letters [num1] through [num2] of [string]",
-                "arguments": {
-                    "num1": {
-                        "type": "number",
-                        "defaultValue": "2"
-                    },
-                    "num2": {
-                        "type": "number",
-                        "defaultValue": "5"
-                    },
-                    "string": {
-                        "type": "string",
-                        "defaultValue": "hello world"
+            "id": "myextension",
+            "name": "My Extension",
+            "blocks": [
+                {
+                    "opcode": "addNumbers",
+                    "blockType": "reporter",
+                    "text": "add [num1] and [num2]",
+                    "arguments": {
+                        "num1": {
+                            "type": "number",
+                            "defaultValue": 0
+                        },
+                        "num2": {
+                            "type": "number",
+                            "defaultValue": 0
+                        }
                     }
                 }
-            }]
+            ]
         };
     }
+
+    addNumbers({ num1, num2 }) {
+        // 在這裡實現方塊的功能
+        const result = num1 + num2;
+        return result;
+    }
 }
-Scratch.extensions.register(new NitroBlock());
+
+Scratch.extensions.register(new MyExtension());
