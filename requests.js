@@ -62,11 +62,11 @@ class HttpExtension {
                 const data = await response.json();
                 return JSON.stringify(data);
             } else {
-                return "Error: " + response.status;
+                return "Error: " + response.status + response.message;
             }
         } catch (error) {
             console.error(error);
-            return "Error: " + error.message;
+            return "Error: " + response.status + error.message;
         }
     }
 
