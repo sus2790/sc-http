@@ -1,7 +1,7 @@
 class HttpExtension {
     constructor(runtime) {
         this.runtime = runtime;
-        this.data = {}; // 初始化一个空对象来存储属性
+        this.data = {};
     }
 
     getInfo() {
@@ -24,6 +24,21 @@ class HttpExtension {
                             "defaultValue": "https://jsonplaceholder.typicode.com/posts/1"
                         },
                         "options": {
+                            "type": "string",
+                            "defaultValue": "{}"
+                        }
+                    }
+                },
+                {
+                    "opcode": "getProperty",
+                    "blockType": "reporter",
+                    "text": "get property [property] from JSON [text]",
+                    "arguments": {
+                        "property": {
+                            "type": "string",
+                            "defaultValue": "propertyName"
+                        },
+                        "text": {
                             "type": "string",
                             "defaultValue": "{}"
                         }
@@ -98,20 +113,31 @@ class HttpExtension {
         }
     }
 
+    getJSONProperty({ property, text }) {
+        try {
+            const jsonData = JSON.parse(text);
+            if (jsonData.hasOwnProperty(property)) {
+                return this.data[property];
+            } else {
+                return "Property not found";
+            }
+        } catch (error) {
+            console.error(error);
+            return "Error: " + error.message;
+        }
+    }
+
     setProperty({ property, value }) {
-        // 设置属性
         this.data[property] = value;
     }
 
     modifyProperty({ property, value }) {
-        // 修改属性
         if (this.data[property] !== undefined) {
             this.data[property] += value;
         }
     }
 
     deleteProperty({ property }) {
-        // 删除属性
         if (this.data[property] !== undefined) {
             delete this.data[property];
         }
