@@ -43,7 +43,8 @@ class HttpExtension {
                             "defaultValue": "{}"
                         }
                     }
-                },
+                }
+            ],
             "menus": {
                 "httpMethods": ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH", "CONNECT", "TRACE"]
             }
@@ -84,7 +85,6 @@ class HttpExtension {
             return "Error: " + error.message;
         }
     }
-
 }
 
 Scratch.extensions.register(new HttpExtension());
