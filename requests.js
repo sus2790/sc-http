@@ -1,13 +1,10 @@
 class HttpExtension {
     constructor(runtime) {
         this.runtime = runtime;
+        this.data = {}; // 初始化一个空对象来存储属性
     }
 
     getInfo() {
-        const httpMethods = [
-            "GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH", "CONNECT", "TRACE"
-        ];
-
         return {
             "id": "httpextension",
             "name": "HTTP Extension",
@@ -33,23 +30,49 @@ class HttpExtension {
                     }
                 },
                 {
-                    "opcode": "getJSONProperty",
-                    "blockType": "reporter",
-                    "text": "get property [property] from JSON [text]",
+                    "opcode": "setProperty",
+                    "blockType": "command",
+                    "text": "set property [property] to [value]",
                     "arguments": {
                         "property": {
                             "type": "string",
                             "defaultValue": "propertyName"
                         },
-                        "text": {
-                            "type": "string",
-                            "defaultValue": "{}"
+                        "value": {
+                            "type": "any",
+                            "defaultValue": ""
                         }
                     }
                 },
+                {
+                    "opcode": "modifyProperty",
+                    "blockType": "command",
+                    "text": "modify property [property] by [value]",
+                    "arguments": {
+                        "property": {
+                            "type": "string",
+                            "defaultValue": "propertyName"
+                        },
+                        "value": {
+                            "type": "number",
+                            "defaultValue": 0
+                        }
+                    }
+                },
+                {
+                    "opcode": "deleteProperty",
+                    "blockType": "command",
+                    "text": "delete property [property]",
+                    "arguments": {
+                        "property": {
+                            "type": "string",
+                            "defaultValue": "propertyName"
+                        }
+                    }
+                }
             ],
             "menus": {
-                "httpMethods": httpMethods
+                "httpMethods": ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH", "CONNECT", "TRACE"]
             }
         };
     }
@@ -57,34 +80,40 @@ class HttpExtension {
     async httpRequest({ method, url, options }) {
         try {
             const requestOptions = JSON.parse(options);
-            const response = await fetch(url, { 
-                method, 
-                mode: 'no-cors',
-                ...requestOptions 
+
+            const response = await fetch(url, {
+                method: method,
+                ...requestOptions,
             });
+
             if (response.ok) {
                 const data = await response.json();
                 return JSON.stringify(data);
             } else {
-                return "Error: " + response.status + response.message;
-            }
-        } catch (error) {
-            console.error(error);
-            return "Error: " + response.status + error.message;
-        }
-    }
-
-    getJSONProperty({ property, text }) {
-        try {
-            const jsonData = JSON.parse(text);
-            if (jsonData.hasOwnProperty(property)) {
-                return jsonData[property];
-            } else {
-                return "Property not found";
+                return "Error: " + response.status;
             }
         } catch (error) {
             console.error(error);
             return "Error: " + error.message;
+        }
+    }
+
+    setProperty({ property, value }) {
+        // 设置属性
+        this.data[property] = value;
+    }
+
+    modifyProperty({ property, value }) {
+        // 修改属性
+        if (this.data[property] !== undefined) {
+            this.data[property] += value;
+        }
+    }
+
+    deleteProperty({ property }) {
+        // 删除属性
+        if (this.data[property] !== undefined) {
+            delete this.data[property];
         }
     }
 }
