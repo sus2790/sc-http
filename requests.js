@@ -15,7 +15,7 @@ class HttpExtension {
                 {
                     "opcode": "httpRequest",
                     "blockType": "reporter",
-                    "text": "Requests [url] - [method]",
+                    "text": "HTTP [method] request to [url]",
                     "arguments": {
                         "method": {
                             "type": "string",
@@ -25,6 +25,17 @@ class HttpExtension {
                         "url": {
                             "type": "string",
                             "defaultValue": "https://jsonplaceholder.typicode.com/posts/1"
+                        }
+                    }
+                },
+                {
+                    "opcode": "parseJSON",
+                    "blockType": "reporter",
+                    "text": "parse JSON [text]",
+                    "arguments": {
+                        "text": {
+                            "type": "string",
+                            "defaultValue": "{}"
                         }
                     }
                 }
@@ -44,6 +55,16 @@ class HttpExtension {
             } else {
                 return "Error: " + response.status;
             }
+        } catch (error) {
+            console.error(error);
+            return "Error: " + error.message;
+        }
+    }
+
+    parseJSON({ text }) {
+        try {
+            const parsedData = JSON.parse(text);
+            return parsedData;
         } catch (error) {
             console.error(error);
             return "Error: " + error.message;
