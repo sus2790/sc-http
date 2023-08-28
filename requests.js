@@ -30,7 +30,7 @@ class HttpExtension {
                     }
                 },
                 {
-                    "opcode": "getJSONProperty",
+                    "opcode": "getJSON",
                     "blockType": "reporter",
                     "text": "get property [property] from JSON [text]",
                     "arguments": {
@@ -44,63 +44,6 @@ class HttpExtension {
                         }
                     }
                 },
-                {
-                    "opcode": "getProperty",
-                    "blockType": "reporter",
-                    "text": "get property [property] from [text]",
-                    "arguments": {
-                        "property": {
-                            "type": "string",
-                            "defaultValue": "propertyName"
-                        },
-                        "text": {
-                            "type": "string",
-                            "defaultValue": "{}"
-                        }
-                    }
-                },
-                {
-                    "opcode": "setProperty",
-                    "blockType": "command",
-                    "text": "set property [property] to [value]",
-                    "arguments": {
-                        "property": {
-                            "type": "string",
-                            "defaultValue": "propertyName"
-                        },
-                        "value": {
-                            "type": "any",
-                            "defaultValue": ""
-                        }
-                    }
-                },
-                {
-                    "opcode": "modifyProperty",
-                    "blockType": "command",
-                    "text": "modify property [property] by [value]",
-                    "arguments": {
-                        "property": {
-                            "type": "string",
-                            "defaultValue": "propertyName"
-                        },
-                        "value": {
-                            "type": "number",
-                            "defaultValue": 0
-                        }
-                    }
-                },
-                {
-                    "opcode": "deleteProperty",
-                    "blockType": "command",
-                    "text": "delete property [property]",
-                    "arguments": {
-                        "property": {
-                            "type": "string",
-                            "defaultValue": "propertyName"
-                        }
-                    }
-                }
-            ],
             "menus": {
                 "httpMethods": ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH", "CONNECT", "TRACE"]
             }
@@ -128,21 +71,7 @@ class HttpExtension {
         }
     }
 
-    getProperty({ property, text }) {
-        try {
-            const jsonData = JSON.parse(text);
-            if (jsonData.hasOwnProperty(property)) {
-                return this.data[property];
-            } else {
-                return "Property not found";
-            }
-        } catch (error) {
-            console.error(error);
-            return "Error: " + error.message;
-        }
-    }
-
-    getJSONProperty({ property, text }) {
+    getJSON({ property, text }) {
         try {
             const jsonData = JSON.parse(text);
             if (jsonData.hasOwnProperty(property)) {
@@ -156,21 +85,6 @@ class HttpExtension {
         }
     }
 
-    setProperty({ property, value }) {
-        this.data[property] = value;
-    }
-
-    modifyProperty({ property, value }) {
-        if (this.data[property] !== undefined) {
-            this.data[property] += value;
-        }
-    }
-
-    deleteProperty({ property }) {
-        if (this.data[property] !== undefined) {
-            delete this.data[property];
-        }
-    }
 }
 
 Scratch.extensions.register(new HttpExtension());
