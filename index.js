@@ -1,3 +1,5 @@
+/* global Scratch */
+
 import retus from "retus"
 
 class ScratchHTTP {
