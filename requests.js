@@ -29,17 +29,6 @@ class HttpExtension {
                     }
                 },
                 {
-                    "opcode": "parseJSON",
-                    "blockType": "reporter",
-                    "text": "parse JSON [text]",
-                    "arguments": {
-                        "text": {
-                            "type": "string",
-                            "defaultValue": "{}"
-                        }
-                    }
-                },
-                {
                     "opcode": "getJSONProperty",
                     "blockType": "reporter",
                     "text": "get property [property] from JSON [text]",
@@ -54,25 +43,6 @@ class HttpExtension {
                         }
                     }
                 },
-                {
-                    "opcode": "modifyJSONProperty",
-                    "blockType": "reporter",
-                    "text": "set property [property] of JSON [text] to [value]",
-                    "arguments": {
-                        "property": {
-                            "type": "string",
-                            "defaultValue": "propertyName"
-                        },
-                        "text": {
-                            "type": "string",
-                            "defaultValue": "{}"
-                        },
-                        "value": {
-                            "type": "string",
-                            "defaultValue": "newValue"
-                        }
-                    }
-                }
             ],
             "menus": {
                 "httpMethods": httpMethods
@@ -95,16 +65,6 @@ class HttpExtension {
         }
     }
 
-    parseJSON({ text }) {
-        try {
-            const parsedData = JSON.parse(text);
-            return parsedData;
-        } catch (error) {
-            console.error(error);
-            return "Error: " + error.message;
-        }
-    }
-
     getJSONProperty({ property, text }) {
         try {
             const jsonData = JSON.parse(text);
@@ -113,17 +73,6 @@ class HttpExtension {
             } else {
                 return "Property not found";
             }
-        } catch (error) {
-            console.error(error);
-            return "Error: " + error.message;
-        }
-    }
-
-    modifyJSONProperty({ property, text, value }) {
-        try {
-            const jsonData = JSON.parse(text);
-            jsonData[property] = value;
-            return JSON.stringify(jsonData);
         } catch (error) {
             console.error(error);
             return "Error: " + error.message;
