@@ -24,7 +24,7 @@ class HttpExtension {
                         },
                         "url": {
                             "type": "string",
-                            "defaultValue": "https://example.com/"
+                            "defaultValue": "https://jsonplaceholder.typicode.com/posts/1"
                         },
                         "options": {
                             "type": "string",
@@ -66,7 +66,7 @@ class HttpExtension {
                 const data = await response.json();
                 return JSON.stringify(data);
             } else {
-                return "Error: " + response.status + response.message;
+                return "Error: " + error.message;
             }
         } catch (error) {
             console.error(error);
@@ -76,7 +76,13 @@ class HttpExtension {
 
     getJSONProperty({ property, text }) {
         try {
-            const jsonData = JSON.parse(text);
+            let jsonData;
+            try {
+                jsonData = JSON.parse(text);
+            } catch (error) {
+                console.error(error);
+                return "Error: Invalid JSON";
+            }
             if (jsonData.hasOwnProperty(property)) {
                 return jsonData[property];
             } else {
