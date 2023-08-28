@@ -1,9 +1,10 @@
 /* global Scratch */
+/// <reference types="scratch-env"/>
 
-import retus from "retus"
+import ky from "ky"
 
-class ScratchHTTP {
-	getInfo() {
+class ScratchHTTP implements ScratchExtension {
+	getInfo(): ExtensionMetadata {
 		return {
 			id: "ScratchHTTP",
 			name: "HTTP Requests",
@@ -14,6 +15,7 @@ class ScratchHTTP {
 				arguments: {
 					method: {
 						type: Scratch.ArgumentType.STRING,
+						menu: "method",
 						defaultValue: "GET"
 					},
 					url: {
@@ -21,12 +23,15 @@ class ScratchHTTP {
 						defaultValue: "https://www.random.org/strings/?num=1&len=10&digits=on&upperalpha=on&loweralpha=on&format=plain"
 					}
 				}
-			}]
+			}],
+			menus: {
+				method: ["GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH"]
+			}
 		}
 	}
 
-	httpRequest({ method, url }) {
-		return retus(url, { method }).body
+	async httpRequest({method, url}: {method: string, url: string}) {
+		return await ky(url, {method}).text()
 	}
 }
 
