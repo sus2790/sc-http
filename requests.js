@@ -57,6 +57,7 @@ class HttpExtension {
 
             const response = await fetch(url, {
                 method: method,
+                mode: 'no-cors',
                 ...requestOptions,
             });
 
